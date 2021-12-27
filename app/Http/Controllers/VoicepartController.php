@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Administration;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Voicepart;
+use App\Http\Requests\StoreVoicepartRequest;
+use App\Http\Requests\UpdateVoicepartRequest;
 
-class ImportStudentsController extends Controller
+class VoicepartController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,27 +25,27 @@ class ImportStudentsController extends Controller
      */
     public function create()
     {
-        return view('administration.uploads.njacda.create', ['filename' => 'students']);
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreVoicepartRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreVoicepartRequest $request)
     {
-        dd($request);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Voicepart  $voicepart
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Voicepart $voicepart)
     {
         //
     }
@@ -52,10 +53,10 @@ class ImportStudentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Voicepart  $voicepart
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Voicepart $voicepart)
     {
         //
     }
@@ -63,11 +64,11 @@ class ImportStudentsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\UpdateVoicepartRequest  $request
+     * @param  \App\Models\Voicepart  $voicepart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateVoicepartRequest $request, Voicepart $voicepart)
     {
         //
     }
@@ -75,10 +76,10 @@ class ImportStudentsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Voicepart  $voicepart
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Voicepart $voicepart)
     {
         //
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administration;
 
 use App\Http\Controllers\Controller;
 use App\Imports\DirectorsImport;
+use App\Imports\StudentsImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -26,7 +27,7 @@ class ImportDirectorsController extends Controller
      */
     public function create()
     {
-        return view('administration.uploads.njacda.create');
+        return view('administration.uploads.njacda.create', ['filename' => 'directors']);
     }
 
     /**
@@ -35,9 +36,11 @@ class ImportDirectorsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    { //dd($request->file('directors'));
-        Excel::import(new DirectorsImport, $request->file('directors'));
+    public function store(Request $request, string $filename)
+    {
+        ($filename === 'directors')
+            ? Excel::import(new DirectorsImport, $request->file('directors'))
+            : Excel::import(new StudentsImport, $request->file('students'));
 
         return back()->with('success','All good!');
     }

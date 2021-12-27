@@ -21,7 +21,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('administration.import.students') }}">
+                        <a href="{{ route('administration.upload.students') }}">
                             Upload Students csv from NJACDA.com
                         </a>
                     </li>

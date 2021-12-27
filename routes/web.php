@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth'],function() {
     Route::get('/administration', [App\Http\Controllers\Administration\AdministrationController::class, 'index'])
         ->name('administration.index');
 
+    /** DIRECTORS **/
     Route::get('/administration/director/{director}', [App\Http\Controllers\Administration\DirectorController::class, 'edit'])
         ->name('administration.director');
 
@@ -38,10 +39,15 @@ Route::group(['middleware' => 'auth'],function() {
     Route::get('/administration/njacda/upload/directors', [App\Http\Controllers\Administration\ImportDirectorsController::class, 'create'])
         ->name('administration.upload.directors');
 
-    Route::post('/administration/njacda/import/directors', [App\Http\Controllers\Administration\ImportDirectorsController::class, 'store'])
-        ->name('administration.import.directors');
+    /** DIRECTORS and STUDENTS */
+    Route::post('/administration/njacda/import/{filename}', [App\Http\Controllers\Administration\ImportDirectorsController::class, 'store'])
+        ->name('administration.import');
 
-    Route::post('/administration/njacda/import/students', [App\Http\Controllers\Administration\ImportStudentsController::class, 'store'])
+    /** STUDENTS **/
+    Route::get('/administration/njacda/upload/students', [App\Http\Controllers\Administration\ImportStudentsController::class, 'create'])
+        ->name('administration.upload.students');
+
+    Route::get('/administration/njacda/import/students', [App\Http\Controllers\Administration\ImportStudentsController::class, 'store'])
         ->name('administration.import.students');
 
 });

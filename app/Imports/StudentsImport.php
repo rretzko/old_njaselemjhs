@@ -3,41 +3,36 @@
 namespace App\Imports;
 
 use App\Models\Director;
+use App\Models\Student;
 use App\Models\User;
+use App\Models\Voicepart;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
 
-class DirectorsImport implements ToModel
+class StudentsImport implements ToModel
 {
     /**
     * @param array $row
-    * array:39 [▼
-    * 0 => "Name (First)"
-    * 1 => "Name (Last)"
-    * 2 => "Home Address (Street Address)"
-    * 3 => "Home Address (Address Line 2)"
-    * 4 => "Home Address (City)"
-    * 5 => "Home Address (State / Province)"
-    * 6 => "Home Address (ZIP / Postal Code)"
-    * 7 => "Home Address (Country)"
-    * 8 => "Email"
-    * 9 => "Phone"
-    * 10 => "I am a CURRENT member of:"
-    * 11 => "Membership Card"
-    * 12 => "Name of School/Organization"
-    * 13 => "School Address (Street Address)"
-    * 14 => "School Address (Address Line 2)"
-    * 15 => "School Address (City)"
-    * 16 => "School Address (State / Province)"
-    * 17 => "School Address (ZIP / Postal Code)"
-    * 18 => "School Address (Country)"
-    * 19 => "Judging Day - Saturday, January 22"
-    * 20 => "Rehearsal Day - Saturday, April 30"
-    * 21 => "Festival Day - Saturday, May 7"
-    * 22 => "How many students have you submitted for the Elementary Honor Choir audition?"
-    * 23 => "How many students have you submitted for the Junior High School Honor Choir audition?"
-    * ...
-     *
+    * array:29 [▼
+    * 0 => "Sponsoring Director Name (Prefix)"
+    * 1 => "Sponsoring Director Name (First)"
+    * 2 => "Sponsoring Director Name (Middle)"
+    * 3 => "Sponsoring Director Name (Last)"
+    * 4 => "Sponsoring Director Name (Suffix)"
+    * 5 => "Sponsoring Director Email"
+    * 6 => "Student Name (First)"
+    * 7 => "Student Name (Last)"
+    * 8 => "Student Grade Level"
+    * 9 => "Student Ensemble"
+    * 10 => "Student Voice Part"
+    * 11 => "Parent Name (First)"
+    * 12 => "Parent Name (Last)"
+    * 13 => "Parent Email"
+    * 14 => "Parent Phone 1"
+    * 15 => "Parent Phone 2"
+    * 16 => "Student MP3 File"
+    * 17 => "Student Contract: I certify that my student and his/her parent has read and agreed to the statement below.  In addition, I understand that as their director I a ▶"
+    * ...*
     * @return \Illuminate\Database\Eloquent\Model|null
     */
     public function model(array $row)
@@ -87,28 +82,42 @@ class DirectorsImport implements ToModel
 
     private function cleanRow(array $row, bool $header_row) : array
     {
-        $dup = User::where('email', $row[8])->first();
+        $dup = Student::where('mp3', $row[16])->first();
 
         //return empty array if is header_row or if duplicate is found
         if($header_row || $dup){ return [];}
 
         $clean = $row;
 
-        //postal code
-        if(strlen($row[6]) === 4){ $clean[6] = '0'.$row[6]; }
+        //director id (user_id)
+        $director = Director::where('first', $row[1])->where('last', $row[3])->first();
+        $clean[0] = $director->user_id;
+
+        //grade
+        $clean[8] = substr($row[8], 5);
+
+        //ensemble_id
+        $clean[9] = strpos($row[9],'High') ? 2 : 1;
+
+        //voicepart_id
+        $clean[10] = $this->parseVoicepart($row[10]);
 
         return $clean;
     }
 
-    private function createUser(array $clean)
+    private function parseVoicepart(string $str) : int
     {
         //remove domain for use as password (ex. rick@mfrholdings )
-        $password = substr($clean[8],0,strpos($clean[8],'.'));
+        $descr = strpos($str, 'High')
+            ? substr($str,14)
+            : substr($str,13);
 
-        return User::create([
-           'name' => $clean[0].' '.$clean[1],
-           'email' => $clean[8],
-           'password' => Hash::make($password),
-        ]);
+        $voicepart = Voicepart::where('descr', $descr)->first();
+
+        if(! $voicepart){ dd($descr);}
+
+        return $voicepart->id;
     }
+
+
 }

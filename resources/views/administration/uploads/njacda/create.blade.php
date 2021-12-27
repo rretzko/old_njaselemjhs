@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Administration: Main Menu') }}
+            {{ __('Administration: Csv File Upload') }}
         </h2>
 
         <div class="text-lg mt-4">
@@ -18,7 +18,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4">
-                <form method="post" action="{{ route('administration.import.directors') }}" enctype="multipart/form-data"
+                <form method="post" action="{{ route('administration.import', ['filename' => $filename]) }}" enctype="multipart/form-data"
                       class="space-y-8 divide-y divide-gray-200"
                 >
                     @csrf
@@ -42,7 +42,7 @@
                                                         <div class="flex text-sm text-gray-600 flex-col">
                                                             <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                                                 <span>Upload a csv file</span>
-                                                                <input id="file-upload" name="directors" type="file" class="sr-only">
+                                                                <input id="file-upload" name="{{ $filename }}" type="file" class="sr-only">
                                                             </label>
                                                             <p class="pl-1">or drag and drop CSV up to 10MB</p>
                                                         </div>
