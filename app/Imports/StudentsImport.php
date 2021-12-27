@@ -50,33 +50,20 @@ class StudentsImport implements ToModel
             return null;
         }
 
-        $user = $this->createUser($clean);
-
-        return new Director([
-            'user_id' => $user->id,
-            'first' => $clean[0],
-            'last' => $clean[1],
-            'address1' => $clean[2],
-            'address2' => $clean[3] ?? '',
-            'city' => $clean[4],
-            'state_abbr' => $clean[5] ?? 'NJ',
-            'postal_code' => $clean[6],
-            'country' => $clean[7] ?? 'US',
-            //'email' => $clean[8], Email is in the users table
-            'phone' => $clean[9],
-            'membership' => $clean[10],
-            'membership_card' => $clean[11],
-            'school' => $clean[12],
-            'saddress1' => $clean[13],
-            'saddress2' => $clean[14] ?? '',
-            'scity' => $clean[15],
-            'sstate_abbr' => $clean[16] ?? 'NJ',
-            'spostal_code' => $clean[17],
-            'judging_day' => $clean[18] ?? '',
-            'rehearsal_day' => $clean[19] ?? '',
-            'festival_day' => $clean[20] ?? '',
-            'elem_student_count' => $clean[21] ?? 0,
-            'jhs_student_count' => ($clean[22] === 'N/A') ? 0 : ($clean[22] === '' ? 0 : $clean[22]),
+        return new Student([
+            'user_id' => $clean[0],
+            'first' => $clean[6],
+            'last' => $clean[7],
+            'grade' => $clean[8],
+            'ensemble_id' => $clean[9] ?? '',
+            'voicepart_id' => $clean[10],
+            'guardian_first' => $clean[11],
+            'guardian_last' => $clean[12],
+            'guardian_email' => $clean[13] ?? '',
+            'guardian_phone1' => $clean[14] ?? '',
+            'guardian_phone2' => $clean[15] ?? '',
+            'mp3' => $clean[16],
+            'contract' => $clean[17],
         ]);
     }
 
@@ -101,6 +88,9 @@ class StudentsImport implements ToModel
 
         //voicepart_id
         $clean[10] = $this->parseVoicepart($row[10]);
+
+        //contract
+        $clean[17] = ($row[17] === 'Yes') ? 1 : 0;
 
         return $clean;
     }
