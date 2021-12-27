@@ -101,7 +101,7 @@ class StudentsImport implements ToModel
 
         //voicepart_id
         $clean[10] = $this->parseVoicepart($row[10]);
-dd($clean);
+
         return $clean;
     }
 
@@ -114,7 +114,7 @@ dd($clean);
 
         $voicepart = Voicepart::where('descr', $descr)->first();
 
-        if(! $voicepart){ dd($descr);}
+        if(! $voicepart){ echo __METHOD__; dd($descr);}
 
         return $voicepart->id;
     }
