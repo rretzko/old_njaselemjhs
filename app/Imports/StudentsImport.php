@@ -101,7 +101,7 @@ class StudentsImport implements ToModel
 
         //voicepart_id
         $clean[10] = $this->parseVoicepart($row[10]);
-
+dd($clean);
         return $clean;
     }
 
